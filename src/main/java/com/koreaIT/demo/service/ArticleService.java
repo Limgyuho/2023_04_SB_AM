@@ -1,4 +1,3 @@
-
 package com.koreaIT.demo.service;
 
 import java.util.List;
@@ -17,12 +16,14 @@ public class ArticleService {
 	@Autowired
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
-		
-		
 	}
 	
-	public Article writeArticle(String title, String body) {
-		return articleRepository.writeArticle(title, body);
+	public void writeArticle(String title, String body) {
+		articleRepository.writeArticle(title, body);
+	}
+	
+	public int getLastInsertId() {
+		return articleRepository.getLastInsertId();
 	}
 	
 	public Article getArticleById(int id) {
