@@ -1,4 +1,3 @@
-
 package com.koreaIT.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,31 @@ public class MemberService {
 			return -1;
 		}
 		
+		existsMember = getMemberByNickname(nickname);
+		
+		if (existsMember != null) {
+			return -2;
+		}
+		
+		existsMember = getMemberByNameAndEmail(name, email);
+		
+		if (existsMember != null) {
+			return -3;
+		}
+		
 		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		
 		return memberRepository.getLastInsertId();
 	}
 	
+	private Member getMemberByNameAndEmail(String name, String email) {
+		return memberRepository.getMemberByNameAndEmail(name, email);
+	}
+
+	private Member getMemberByNickname(String nickname) {
+		return memberRepository.getMemberByNickname(nickname);
+	}
+
 	private Member getMemberByLoginId(String loginId) {
 		return memberRepository.getMemberByLoginId(loginId);
 	}
