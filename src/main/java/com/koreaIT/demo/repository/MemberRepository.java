@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import com.koreaIT.demo.vo.Member;
+import com.koreaIT.demo.vo.ResultData;
 
 @Mapper
 public interface MemberRepository {
@@ -23,7 +24,7 @@ public interface MemberRepository {
 	public void doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email);
 	
 	@Select("SELECT LAST_INSERT_ID()")
-	public int getLastInsertId();
+	public ResultData getLastInsertId();
 
 	@Select("""
 			SELECT *
