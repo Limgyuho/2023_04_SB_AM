@@ -9,7 +9,7 @@ import com.koreaIT.demo.vo.Article;
 @Mapper
 public interface ArticleRepository {
 	
-	public void writeArticle(String title, String body);
+	public void writeArticle(int memberId, String title, String body);
 	
 	public int getLastInsertId();
 
