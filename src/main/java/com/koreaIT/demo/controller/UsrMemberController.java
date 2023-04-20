@@ -51,7 +51,7 @@ public class UsrMemberController {
 			return ResultData.from(doJoinRd.getResultCode(), doJoinRd.getMsg());
 		}
 		
-		return ResultData.from(doJoinRd.getResultCode(), doJoinRd.getMsg(), memberService.getMemberById((int) doJoinRd.getData1()));
+		return ResultData.from(doJoinRd.getResultCode(), doJoinRd.getMsg(), memberService.getMemberById(doJoinRd.getData1()));
 	}
 	
 }
