@@ -26,7 +26,7 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
 	public ResultData<Member> doJoin(HttpSession httpSession, String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
-
+		
 		if (httpSession.getAttribute("loginedMemberId") != null) {
 			return ResultData.from("F-A", "로그아웃 후 이용해주세요");
 		}
@@ -50,6 +50,9 @@ public class UsrMemberController {
 			return ResultData.from("F-6", "이메일을 입력해주세요");
 		}
 		
+		
+		
+		
 		ResultData<Integer> doJoinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		
 		if (doJoinRd.isFail()) {
@@ -63,6 +66,7 @@ public class UsrMemberController {
 	@ResponseBody
 	public ResultData doLogin(HttpSession httpSession, String loginId, String loginPw) {
 		
+		
 		if (httpSession.getAttribute("loginedMemberId") != null) {
 			return ResultData.from("F-A", "로그아웃 후 이용해주세요");
 		}
@@ -74,6 +78,7 @@ public class UsrMemberController {
 			return ResultData.from("F-2", "비밀번호를 입력해주세요");
 		}
 		
+		//멤버 존재여부 판단 객체를 생성 서비스에서 가져오기
 		Member member = memberService.getMemberByLoginId(loginId);
 		
 		if (member == null) {
@@ -84,6 +89,7 @@ public class UsrMemberController {
 			return ResultData.from("F-4", "비밀번호가 일치하지 않습니다");
 		}
 
+		//
 		httpSession.setAttribute("loginedMemberId", member.getId());
 		
 		return ResultData.from("S-1", Util.f("%s 회원님 환영합니다~!", member.getNickname()));

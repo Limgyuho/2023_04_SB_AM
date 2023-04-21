@@ -2,6 +2,8 @@ package com.koreaIT.demo.repository;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.koreaIT.demo.vo.Article;
@@ -20,5 +22,6 @@ public interface ArticleRepository {
 	public void modifyArticle(int id, String title, String body);
 
 	public void deleteArticle(int id);
+
 
 }
