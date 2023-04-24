@@ -6,7 +6,7 @@
 	<section class="mt-8 text-xl">
 		<div class="container mx-auto px-3">
 			<div class="table-box-type-1">
-				<table border="1">
+				<table>
 					<thead>
 						<tr>
 							<th>번호</th>

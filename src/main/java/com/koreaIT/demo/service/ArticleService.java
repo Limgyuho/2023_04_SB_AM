@@ -37,8 +37,6 @@ public class ArticleService {
 	}
 	
 	public ResultData<Article> modifyArticle(int id, String title, String body) {
-
-		
 		
 		articleRepository.modifyArticle(id, title, body);
 		
@@ -52,13 +50,15 @@ public class ArticleService {
 
 	public ResultData actorCanModify(int loginedMemberId, int memberId) {
 		
-		
-		
 		if (loginedMemberId != memberId) {
 			return ResultData.from("F-B", "해당 게시물에 대한 권한이 없습니다");
 		}
 		
 		return ResultData.from("S-1", "수정 가능");
+	}
+
+	public Article getForPrintArticle(int id) {
+		return articleRepository.getForPrintArticle(id);
 	}
 	
 }

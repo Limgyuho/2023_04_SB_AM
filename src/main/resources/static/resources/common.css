@@ -1,0 +1,31 @@
+/* @charset "UTF-8"; */
+@font-face {
+    font-family: 'NanumSquareNeo-Variable';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html > body {
+	font-family: 'NanumSquareNeo-Variable', sans-serif;
+	text-underline-position:under;
+}
+
+.table-box-type-1 > table {
+	width: 100%;
+}
+
+.table-box-type-1 > table th, .table-box-type-1 > table td {
+	border:1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+
+.btn-text-link {
+	color:black;
+}
+
+.btn-text-link:hover {
+	color:olive;
+	text-decoration: underline;
+}
