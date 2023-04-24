@@ -67,7 +67,6 @@ public class UsrArticleController {
 		List<Article> articles = articleService.getArticles();
 		
 		model.addAttribute("articles", articles);
-		
 		return "usr/article/list";
 	}
 	
@@ -86,6 +85,7 @@ public class UsrArticleController {
 		}
 		
 		ResultData actorCanModifyRd = articleService.actorCanModify((int) httpSession.getAttribute("loginedMemberId"), article.getMemberId());
+		
 		
 		if (actorCanModifyRd.isFail()) {
 			return ResultData.from(actorCanModifyRd.getResultCode(), actorCanModifyRd.getMsg());

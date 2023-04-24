@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'BookkMyungjo-Bd';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Bd.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+
+html > body{
+	font-family: 'BookkMyungjo-Bd',sans-serif;
+}
+.tabel-box-type-1 > table{
+	width: 100%;
+	
+}
+
+.table-box-type-1 > table th, .table-box-type-1 > table td {
+	border:1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+
