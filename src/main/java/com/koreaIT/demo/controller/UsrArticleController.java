@@ -50,9 +50,15 @@ public class UsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, int id) {
+	public String showDetail(Model model, HttpSession httpSession, int id) {
 		
-		Article article = articleService.getForPrintArticle(id);
+		int loginedMemberId = 0;
+		
+		if (httpSession.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
+		}
+		
+		Article article = articleService.getForPrintArticle(loginedMemberId, id);
 		
 		model.addAttribute("article", article);
 		

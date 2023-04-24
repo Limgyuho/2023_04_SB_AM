@@ -9,8 +9,8 @@ import com.koreaIT.demo.repository.ArticleRepository;
 import com.koreaIT.demo.util.Util;
 import com.koreaIT.demo.vo.Article;
 import com.koreaIT.demo.vo.ResultData;
-
-@Service
+	
+	@Service
 public class ArticleService {
 	
 	private ArticleRepository articleRepository;
@@ -57,8 +57,35 @@ public class ArticleService {
 		return ResultData.from("S-1", "수정 가능");
 	}
 
-	public Article getForPrintArticle(int id) {
-		return articleRepository.getForPrintArticle(id);
+	public Article getForPrintArticle(int loginedMemberId, int id) {
+		
+		Article article = articleRepository.getForPrintArticle(id);
+		
+		actorCanChangeData(loginedMemberId, article);
+		
+		return article;
+	}
+
+	private void actorCanChangeData(int loginedMemberId, Article article) {
+		if(article == null) {
+			return;
+		}
+		
+		ResultData actorCanChangeDataRd = actorCanDelete(loginedMemberId, article);
+		
+		article.setActorCanChangeData(actorCanChangeDataRd.isSuccess());
+	}
+
+	private ResultData actorCanDelete(int loginedMemberId, Article article) {
+		if(article == null) {
+			return ResultData.from("F-1", "해당 게시물은 존재하지 않습니다");
+		}
+		
+		if (loginedMemberId != article.getMemberId()) {
+			return ResultData.from("F-B", "해당 게시물에 대한 권한이 없습니다");	
+		}
+		
+		return ResultData.from("S-1", "삭제 가능");
 	}
 	
 }
