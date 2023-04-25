@@ -52,12 +52,16 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, HttpSession httpSession, int id) {
 		
+		//로그인이 되었을때 디테일부분에서 권한을 확인 하기 위해 서비스 부분으로 넘겨주기 위해 변수를 만들고
 		int loginedMemberId = 0;
 		
+		//세션으로 권한 체크를 한후
 		if (httpSession.getAttribute("loginedMemberId") != null) {
+			//서비스로 넘겨주기 위해 만들어주 변수에 결과를 형변환을 한다 
 			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
 		}
 		
+		//서비스 디테일을 바라보는 부분에 변수를 넘겨주어 야 하기 때문에 파라미터를 추가한다
 		Article article = articleService.getForPrintArticle(loginedMemberId, id);
 		
 		model.addAttribute("article", article);
