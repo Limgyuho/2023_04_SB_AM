@@ -29,8 +29,12 @@ public class UsrArticleController {
 	// 액션 메서드
 	@RequestMapping("/usr/article/doAdd")
 	@ResponseBody
+	//세션으로 로그인 판변을 매번 확인 하던것은 파라미터로 넣어준다
 	public ResultData<Article> doAdd(HttpServletRequest req, String title, String body) {
 		
+		//객체가 만들어 지는 순간 생성자를 통해서 가져와야 한다
+		//vo.rq에 있는 로그인드멤버아이디를 가져올수있다.
+		//타입rq 이기에 형변환을 해준다
 		Rq rq = (Rq) req.getAttribute("Rq");
 		
 		if (Util.empty(title)) {
@@ -41,6 +45,7 @@ public class UsrArticleController {
 			return ResultData.from("F-2", "내용을 입력해주세요");
 		}
 		
+		//더이상 세션에 저장하지 않기깨문에 알큐겟으로 가져온다
 		articleService.writeArticle(rq.getLoginedMemberId(), title, body);
 		
 		int id = articleService.getLastInsertId();
@@ -51,6 +56,10 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, HttpServletRequest req, int id) {
 		
+
+		//객체가 만들어 지는 순간 생성자를 통해서 가져와야 한다
+		//vo.rq에 있는 로그인드멤버아이디를 가져올수있다.
+		//타입rq 이기에 형변환을 해준다
 		Rq rq = (Rq) req.getAttribute("Rq");
 		
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
@@ -73,6 +82,10 @@ public class UsrArticleController {
 	@ResponseBody
 	public ResultData<Article> doModify(HttpServletRequest req, int id, String title, String body) {
 		
+
+		//객체가 만들어 지는 순간 생성자를 통해서 가져와야 한다
+		//vo.rq에 있는 로그인드멤버아이디를 가져올수있다.
+		//타입rq 이기에 형변환을 해준다
 		Rq rq = (Rq) req.getAttribute("Rq");
 		
 		if (rq.getLoginedMemberId() == 0) {
@@ -81,6 +94,8 @@ public class UsrArticleController {
 		
 		Article article = articleService.getArticleById(id);
 		
+		//수정과 삭제 를 한번에 하는 것을 만듬 actorCanMD으로 실행문 변경,인자 역시 멤버 아이디가 아니라
+		//아티클로 넘겨주어 한번에 확인 한다 널검증을 서비스 actorCanMD에서 널검증과 메시지를 보여주는 역할을 넘겨준다 
 		ResultData actorCanModifyRd = articleService.actorCanMD(rq.getLoginedMemberId(), article);
 		
 		if (actorCanModifyRd.isFail()) {
@@ -102,6 +117,8 @@ public class UsrArticleController {
 		
 		Article article = articleService.getArticleById(id);
 		
+		//수정과 삭제 를 한번에 하는 것을 만듬 actorCanMD으로 실행문 변경,인자 역시 멤버 아이디가 아니라
+		//아티클로 넘겨주어 한번에 확인 한다 널검증을 서비스 actorCanMD에서 널검증과 메시지를 보여주는 역할을 넘겨준다
 		ResultData actorCanModifyRd = articleService.actorCanMD(rq.getLoginedMemberId(), article);
 		
 		if (actorCanModifyRd.isFail()) {

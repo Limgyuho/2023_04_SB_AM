@@ -20,12 +20,21 @@ public class Util {
 		return String.format(format, args);
 	}
 
+	
+	
+	//수정 삭제를 하였을때 리절트 데이터가 나오는것이 아니라 
+	//뒤로 돌아가기 위해서 매서드를 생성 한다 삭제수정이 완료후 리스트로 돌아간다
+	
+	//보여줄 메세지가 없을때 수정이나 삭제가 잘 되아 않았을경우
+	
 	public static String jsHistoryBack(String msg) {
-		
+	
+		//문제가 있다면 컨드롤러로 간다
 		if (msg == null) {
 			msg = "";
 		}
-		
+		//실제로 수정 삭제가 되지 않을 경우 이 메서드자체가 성공할경우
+		//스크립트로 틀을 짜준다 실제로 메세지가 보여주는 곳은 컨트롤러의 리턴 부분이다
 		return Util.f("""
 					<script>
 						const msg = '%s'.trim();
@@ -37,6 +46,8 @@ public class Util {
 					""", msg);
 	}
 
+	//뒤로 돌아가기 위해서 매서드를 생성 한다 삭제수정이 완료후 리스트로 돌아간다
+	//수정이나 삭제를 하였을때 성공 했다는 메세지를 보여주기 위함이다
 	public static String jsReplace(String msg, String uri) {
 		
 		if (msg == null) {
@@ -47,6 +58,7 @@ public class Util {
 			uri = "";
 		}
 		
+		//스크립트로 틀을 짜준다 실제로 메세지가 보여주는 곳은 컨트롤러의 리턴 부분이다
 		return Util.f("""
 				<script>
 					const msg = '%s'.trim();
