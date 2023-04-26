@@ -48,11 +48,7 @@ public class ArticleService {
 		articleRepository.deleteArticle(id);
 	}
 	
-	//실직적인 수정 삭제 권한 체크는 이곳에서 한다
-	//수정 삭제 기능을 한번에 하기 위함
 	public ResultData actorCanMD(int loginedMemberId, Article article) {
-		//한번에 가능하게 만들어 컨트롤로에서 널검증을 하여 보여주던 것을 지우고
-		//여기서 한번에 보여주는 것이 가능하다
 		if(article == null) {
 			return ResultData.from("F-1", "해당 게시물은 존재하지 않습니다");
 		}
@@ -64,18 +60,14 @@ public class ArticleService {
 		return ResultData.from("S-1", "가능");
 	}
 
-	//디테일 부분에서 버튼이 보이냐 안보이냐 부분이 이곳에서
-	public Article getForPrintArticle(int loginedMemberId, int id) {
+	public Article getForPrintArticle(int id) {
 		
 		Article article = articleRepository.getForPrintArticle(id);
 		
-		//실제 실행은 아래 실행문 에서 하며
-		actorCanChangeData(loginedMemberId, article);
-		
 		return article;
 	}
-	//실제로actorCanChangeData(loginedMemberId, article);은 이곳에서 동작한다
-	private void actorCanChangeData(int loginedMemberId, Article article) {
+
+	public void actorCanChangeData(int loginedMemberId, Article article) {
 		
 		ResultData actorCanChangeDataRd = actorCanMD(loginedMemberId, article);
 		

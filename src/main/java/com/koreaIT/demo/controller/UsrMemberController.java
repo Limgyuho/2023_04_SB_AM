@@ -1,10 +1,11 @@
-
 package com.koreaIT.demo.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,9 +28,11 @@ public class UsrMemberController {
 	// 액션 메서드
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(HttpSession httpSession, String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+	public ResultData<Member> doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 
-		if (httpSession.getAttribute("loginedMemberId") != null) {
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		if (rq.getLoginedMemberId() != 0) {
 			return ResultData.from("F-A", "로그아웃 후 이용해주세요");
 		}
 		
@@ -68,9 +71,11 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public String doLogin(HttpSession httpSession, String loginId, String loginPw) {
+	public String doLogin(HttpServletRequest req, String loginId, String loginPw) {
 		
-		if (httpSession.getAttribute("loginedMemberId") != null) {
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		if (rq.getLoginedMemberId() != 0) {
 			return Util.jsHistoryBack("로그아웃 후 이용해주세요");
 		}
 		
@@ -91,22 +96,24 @@ public class UsrMemberController {
 			return Util.jsHistoryBack("비밀번호가 일치하지 않습니다");
 		}
 
-		httpSession.setAttribute("loginedMemberId", member.getId());
+		rq.login(member);
 		
 		return Util.jsReplace(Util.f("%s 회원님 환영합니다~!", member.getNickname()), "/");
 	}
 	
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
-	public ResultData doLogout(HttpSession httpSession) {
+	public String doLogout(HttpServletRequest req) {
 		
-		if (httpSession.getAttribute("loginedMemberId") == null) {
-			return ResultData.from("F-A", "로그인 후 이용해주세요");
-		}
+		Rq rq = (Rq) req.getAttribute("rq");
 		
-		httpSession.removeAttribute("loginedMemberId");
+//		if (rq.getLoginedMemberId() == 0) {
+//			return Util.jsHistoryBack("로그인 후 이용해주세요");
+//		}
 		
-		return ResultData.from("S-1", "정상적으로 로그아웃 되었습니다");
+		rq.logout();
+		
+		return Util.jsReplace("정상적으로 로그아웃 되었습니다", "/");
 	}
 	
 }
