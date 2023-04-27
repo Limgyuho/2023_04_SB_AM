@@ -32,16 +32,12 @@ public class ArticleService {
 		return articleRepository.getArticleById(id);
 	}
 	
-	public List<Article> getArticles(){
-		return articleRepository.getArticles();
+	public List<Article> getArticles(int boardId){
+		return articleRepository.getArticles(boardId);
 	}
 	
-	public ResultData<Article> modifyArticle(int id, String title, String body) {
-		
+	public void modifyArticle(int id, String title, String body) {
 		articleRepository.modifyArticle(id, title, body);
-		
-		return ResultData.from("S-1", Util.f("%d번 게시물을 수정했습니다", id), "article", getArticleById(id));
-		
 	}
 	
 	public void deleteArticle(int id) {

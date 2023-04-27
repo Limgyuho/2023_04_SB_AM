@@ -1,4 +1,3 @@
-
 package com.koreaIT.demo.controller;
 
 import java.util.List;
@@ -12,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.koreaIT.demo.service.ArticleService;
+import com.koreaIT.demo.service.BoardService;
 import com.koreaIT.demo.util.Util;
 import com.koreaIT.demo.vo.Article;
+import com.koreaIT.demo.vo.Board;
 import com.koreaIT.demo.vo.ResultData;
 import com.koreaIT.demo.vo.Rq;
 
@@ -21,10 +22,12 @@ import com.koreaIT.demo.vo.Rq;
 public class UsrArticleController {
 	
 	private ArticleService articleService;
+	private BoardService boardService;
 	
 	@Autowired
-	public UsrArticleController(ArticleService articleService) {
+	public UsrArticleController(ArticleService articleService, BoardService boardService) {
 		this.articleService = articleService;
+		this.boardService = boardService;
 	}
 	
 	@RequestMapping("/usr/article/write")
@@ -50,7 +53,7 @@ public class UsrArticleController {
 		
 		int id = articleService.getLastInsertId();
 		
-		return Util.jsReplace(Util.f("%d번 게시물이 생성되었습니다", id), Util.f("list?id=%d", id));
+		return Util.jsReplace(Util.f("%d번 게시물이 생성되었습니다", id), Util.f("detail?id=%d", id));
 	}
 	
 	@RequestMapping("/usr/article/detail")
@@ -68,10 +71,14 @@ public class UsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model) {
-		List<Article> articles = articleService.getArticles();
+	public String showList(Model model, int boardId) {
+		
+		Board board = boardService.getBoardById(boardId);
+		
+		List<Article> articles = articleService.getArticles(boardId);
 		
 		model.addAttribute("articles", articles);
+		model.addAttribute("board", board);
 		
 		return "usr/article/list";
 	}

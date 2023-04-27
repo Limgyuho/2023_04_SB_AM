@@ -15,7 +15,7 @@ public interface ArticleRepository {
 
 	public Article getArticleById(int id);
 	
-	public List<Article> getArticles();
+	public List<Article> getArticles(int boardId);
 
 	public void modifyArticle(int id, String title, String body);
 

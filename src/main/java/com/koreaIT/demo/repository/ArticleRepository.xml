@@ -35,6 +35,10 @@
 			FROM article AS A
 			INNER JOIN `member` AS M
 			ON A.memberId = M.id
+			WHERE 1 = 1
+			<if test="boardId != 0">
+				AND boardId = #{boardId}
+			</if>
 			ORDER BY id DESC
 	</select>
 	
