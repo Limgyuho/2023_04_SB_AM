@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <script>
 	let msg = '${msg}'.trim();
-	let isHistoryBack = '${isHistoryBack}';
+	let isHistoryBack = ${isHistoryBack};
 	
 	// falsy
 	if (msg) {

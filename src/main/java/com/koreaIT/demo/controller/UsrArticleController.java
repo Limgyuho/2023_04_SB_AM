@@ -71,14 +71,26 @@ public class UsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, int boardId) {
+	public String showList(HttpServletRequest req,Model model, int boardId) {
 		
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		//널 검증을 아티틀처럼 서비스에 따로 ㅇ몰겨야 하나
 		Board board = boardService.getBoardById(boardId);
-		
+		if(board ==null) {
+			return rq.jsReturnOnView("게시물이 존재하지 않습니다", true);
+		}
+		//여기는 게시물을 보여주기 위해서 담는거고
 		List<Article> articles = articleService.getArticles(boardId);
+		//개시물의 개수를 보여주기 위해서 한다
+		//게시물의 갯수는 숫자이므로 정수타입이다
+		int articlesCnt = articleService.getArticlesCnt(boardId);
 		
+		//게시물의 개수를 모델즉db 에 추가한다
+		model.addAttribute("articlesCnt", articlesCnt);
 		model.addAttribute("articles", articles);
 		model.addAttribute("board", board);
+		
 		
 		return "usr/article/list";
 	}

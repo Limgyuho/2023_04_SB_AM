@@ -30,6 +30,12 @@
 			WHERE id = #{id}
 	</select>
 	
+	<select id="getArticlesCnt" resultType="int">
+		SELECT COUNT(*)
+			FROM article
+			WHERE boardId = #{boardId}
+	</select>
+	
 	<select id="getArticles" resultType="Article">
 		SELECT A.*, M.name AS writerName 
 			FROM article AS A
