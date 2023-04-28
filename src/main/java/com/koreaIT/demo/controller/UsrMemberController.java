@@ -1,11 +1,7 @@
 package com.koreaIT.demo.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,19 +15,19 @@ import com.koreaIT.demo.vo.Rq;
 public class UsrMemberController {
 	
 	private MemberService memberService;
+	private Rq rq;
 	
 	@Autowired
-	public UsrMemberController(MemberService memberService) {
+	public UsrMemberController(MemberService memberService, Rq rq) {
 		this.memberService = memberService;
+		this.rq = rq;
 	}
 	
 	// 액션 메서드
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 
-		Rq rq = (Rq) req.getAttribute("rq");
-		
 		if (rq.getLoginedMemberId() != 0) {
 			return ResultData.from("F-A", "로그아웃 후 이용해주세요");
 		}
@@ -71,9 +67,7 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public String doLogin(HttpServletRequest req, String loginId, String loginPw) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String doLogin(String loginId, String loginPw) {
 		
 		if (rq.getLoginedMemberId() != 0) {
 			return Util.jsHistoryBack("로그아웃 후 이용해주세요");
@@ -103,13 +97,7 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
-	public String doLogout(HttpServletRequest req) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
-		
-//		if (rq.getLoginedMemberId() == 0) {
-//			return Util.jsHistoryBack("로그인 후 이용해주세요");
-//		}
+	public String doLogout() {
 		
 		rq.logout();
 		

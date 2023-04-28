@@ -2,8 +2,6 @@ package com.koreaIT.demo.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +21,13 @@ public class UsrArticleController {
 	
 	private ArticleService articleService;
 	private BoardService boardService;
+	private Rq rq;
 	
 	@Autowired
-	public UsrArticleController(ArticleService articleService, BoardService boardService) {
+	public UsrArticleController(ArticleService articleService, BoardService boardService, Rq rq) {
 		this.articleService = articleService;
 		this.boardService = boardService;
+		this.rq = rq;
 	}
 	
 	@RequestMapping("/usr/article/write")
@@ -37,11 +37,7 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, String title, String body,int boardId) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
-		//공지인지 자유 인지 먼저 선택
-		
+	public String doWrite(int boardId, String title, String body) {
 		
 		if (Util.empty(title)) {
 			return Util.jsHistoryBack("제목을 입력해주세요");
@@ -51,21 +47,15 @@ public class UsrArticleController {
 			return Util.jsHistoryBack("내용을 입력해주세요");
 		}
 		
-		//선택 된 인자를 같이 저장?
-		articleService.writeArticle(rq.getLoginedMemberId(), title, body,boardId);
+		articleService.writeArticle(rq.getLoginedMemberId(), boardId, title, body);
 		
 		int id = articleService.getLastInsertId();
-		
-		
-		
 		
 		return Util.jsReplace(Util.f("%d번 게시물이 생성되었습니다", id), Util.f("detail?id=%d", id));
 	}
 	
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, HttpServletRequest req, int id) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String showDetail(Model model, int id) {
 		
 		Article article = articleService.getForPrintArticle(id);
 		
@@ -77,35 +67,27 @@ public class UsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/list")
-	public String showList(HttpServletRequest req,Model model, int boardId) {
+	public String showList(Model model, int boardId) {
 		
-		Rq rq = (Rq) req.getAttribute("rq");
-		
-		//널 검증을 아티틀처럼 서비스에 따로 ㅇ몰겨야 하나
 		Board board = boardService.getBoardById(boardId);
-		if(board ==null) {
-			return rq.jsReturnOnView("게시물이 존재하지 않습니다", true);
-		}
-		//여기는 게시물을 보여주기 위해서 담는거고
-		List<Article> articles = articleService.getArticles(boardId);
-		//개시물의 개수를 보여주기 위해서 한다
-		//게시물의 갯수는 숫자이므로 정수타입이다
-		int articlesCnt = articleService.getArticlesCnt(boardId);
 		
-		//게시물의 개수를 모델즉db 에 추가한다
+		if (board == null) {
+			return rq.jsReturnOnView("존재하지 않는 게시판입니다", true);
+		}
+		
+		int articlesCnt = articleService.getArticlesCnt(boardId);
+		List<Article> articles = articleService.getArticles(boardId);
+		
 		model.addAttribute("articlesCnt", articlesCnt);
 		model.addAttribute("articles", articles);
 		model.addAttribute("board", board);
-		
 		
 		return "usr/article/list";
 	}
 	
 	@RequestMapping("/usr/article/modify")
-	public String modify(HttpServletRequest req, Model model, int id) {
+	public String modify(Model model, int id) {
 	
-		Rq rq = (Rq) req.getAttribute("rq");
-		
 		Article article = articleService.getForPrintArticle(id);
 		
 		ResultData actorCanMD = articleService.actorCanMD(rq.getLoginedMemberId(), article);
@@ -121,9 +103,7 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(HttpServletRequest req, int id, String title, String body) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String doModify(int id, String title, String body) {
 		
 		Article article = articleService.getArticleById(id);
 		
@@ -140,9 +120,7 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public String doDelete(HttpServletRequest req, int id) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String doDelete(int id) {
 		
 		Article article = articleService.getArticleById(id);
 		
