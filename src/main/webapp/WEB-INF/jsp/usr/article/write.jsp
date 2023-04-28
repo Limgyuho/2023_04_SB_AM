@@ -12,6 +12,10 @@
 						<colgroup>
 							<col width="200" />
 						</colgroup>
+							<select name="boardId" >
+							  <option value="2">자유게시판</option>
+							  <option value="1">공지사항</option>
+							</select>				
 						<tbody>
 							<tr>
 								<th>제목</th>

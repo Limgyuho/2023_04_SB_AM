@@ -17,5 +17,5 @@ public interface BoardRepository {
 			""")
 	public Board getBoardById(int boardId);
 		
-	public int getBoardCnt(int boardId);
+	
 }

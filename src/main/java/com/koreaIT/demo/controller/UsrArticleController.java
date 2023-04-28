@@ -37,9 +37,11 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body,int boardId) {
 		
 		Rq rq = (Rq) req.getAttribute("rq");
+		//공지인지 자유 인지 먼저 선택
+		
 		
 		if (Util.empty(title)) {
 			return Util.jsHistoryBack("제목을 입력해주세요");
@@ -49,9 +51,13 @@ public class UsrArticleController {
 			return Util.jsHistoryBack("내용을 입력해주세요");
 		}
 		
-		articleService.writeArticle(rq.getLoginedMemberId(), title, body);
+		//선택 된 인자를 같이 저장?
+		articleService.writeArticle(rq.getLoginedMemberId(), title, body,boardId);
 		
 		int id = articleService.getLastInsertId();
+		
+		
+		
 		
 		return Util.jsReplace(Util.f("%d번 게시물이 생성되었습니다", id), Util.f("detail?id=%d", id));
 	}
