@@ -1,3 +1,4 @@
+# DB 삭제/생성/사용
 DROP DATABASE IF EXISTS SB_AM;
 CREATE DATABASE SB_AM;
 USE SB_AM;
@@ -119,3 +120,14 @@ SELECT * FROM `member`;
 SELECT * FROM board;
 
 SELECT LAST_INSERT_ID();
+
+/* 게시물 늘리기 쿼리
+insert into article
+(
+    regDate, updateDate, memberId, boardId, title, `body`
+)
+select now(), now(), FLOOR(RAND() * 3) + 1, FLOOR(RAND() * 2) + 1, CONcat('제목_', rand()), CONCAT('내용_', RAND())
+from article;
+*/
+
+SELECT COUNT(*) FROM article;
