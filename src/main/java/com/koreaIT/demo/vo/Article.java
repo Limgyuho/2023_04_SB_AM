@@ -17,4 +17,7 @@ public class Article {
 	
 	private String writerName;
 	private boolean actorCanChangeData;
+
+	private String searchType;
+	private String searchKeyword;
 }

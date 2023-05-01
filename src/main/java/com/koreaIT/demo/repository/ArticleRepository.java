@@ -15,7 +15,7 @@ public interface ArticleRepository {
 
 	public Article getArticleById(int id);
 	
-	public List<Article> getArticles(int boardId, int limitStart, int itemsInAPage);
+	public List<Article> getArticles(int boardId, String searchKeywordType, String searchKeyword, int limitStart, int itemsInAPage);
 
 	public void modifyArticle(int id, String title, String body);
 
@@ -23,6 +23,6 @@ public interface ArticleRepository {
 
 	public Article getForPrintArticle(int id);
 
-	public int getArticlesCnt(int boardId);
+	public int getArticlesCnt(int boardId, String searchKeywordType, String searchKeyword);
 
 }
