@@ -17,6 +17,12 @@
 		SELECT LAST_INSERT_ID()
 	</select>
 	
+	<update id="increaseHitCount">
+		UPDATE article
+			SET hitCount = hitCount + 1
+			WHERE id = #{id}
+	</update>
+	
 	<select id="getForPrintArticle" resultType="Article">
 		SELECT A.*, M.name AS writerName 
 			FROM article AS A

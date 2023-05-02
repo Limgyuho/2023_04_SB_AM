@@ -8,6 +8,7 @@
 			<div class="mb-2 flex justify-between items-end">
 				<div><span>총 : ${articlesCnt } 개</span></div>
 				<form>
+				 
 					<input type="hidden" name="boardId" value="${board.id }"/>
 					<select data-value="${searchKeywordType }" class="select select-bordered" name="searchKeywordType">
 						<option value="title">제목</option>
