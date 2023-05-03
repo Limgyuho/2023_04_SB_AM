@@ -104,6 +104,9 @@ public class UsrArticleController {
 			@RequestParam(defaultValue = "title") String searchKeywordType,
 			@RequestParam(defaultValue = "") String searchKeyword) {
 
+		
+		
+		
 		if (page <= 0) {
 			return rq.jsReturnOnView("페이지번호가 올바르지 않습니다", true);
 		}

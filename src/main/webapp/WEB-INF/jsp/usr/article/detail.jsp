@@ -40,6 +40,16 @@
 							<th>내용</th>
 							<td>${article.body }</td>
 						</tr>
+						<div class="mt-2 flex justify-end">
+							<c:if test="${rq.getLoginedMemberId() != 0  }">
+								<div class="mt-2">
+									<button class=" btn type="button" >좋아요</button>
+									<button class=" btn type="button" >싫어요</button>
+								</div>
+							</c:if>
+						</div>
+						
+						
 					</tbody>
 				</table>
 			</div>
