@@ -8,7 +8,6 @@
 			<div class="mb-2 flex justify-between items-end">
 				<div><span>총 : ${articlesCnt } 개</span></div>
 				<form>
-				 
 					<input type="hidden" name="boardId" value="${board.id }"/>
 					<select data-value="${searchKeywordType }" class="select select-bordered" name="searchKeywordType">
 						<option value="title">제목</option>
@@ -16,7 +15,7 @@
 						<option value="title,body">제목 + 내용</option>
 					</select>
 					<input class="ml-2 w-80 input input-bordered" name="searchKeyword" placeholder="검색어를 입력해주세요" maxlength="20" value="${searchKeyword }"/>
-					<button class="ml-2 btn-text-link btn btn-active btn-ghost">검색</button>
+					<button class="ml-2 btn-text-link btn btn-active">검색</button>
 				</form>
 			</div>
 			<div class="table-box-type-1">
@@ -43,7 +42,7 @@
 			</div>
 			<div class="mt-2 flex justify-end">
 				<c:if test="${rq.getLoginedMemberId() != 0  }">
-					<a class="btn-text-link btn btn-active btn-ghost" href="write">WRITE</a>
+					<a class="btn-text-link btn btn-active" href="write">WRITE</a>
 				</c:if>
 			</div>
 			<div class="mt-2 flex justify-center">

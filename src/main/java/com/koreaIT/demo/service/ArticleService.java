@@ -88,6 +88,10 @@ public class ArticleService {
 		return ResultData.from("S-1", "조회수 증가", "affectedRowsCount", affectedRowsCount);
 	}
 
+	public int getArticleHitCount(int id) {
+		return articleRepository.getArticleHitCount(id);
+	}
+
 
 	
 }

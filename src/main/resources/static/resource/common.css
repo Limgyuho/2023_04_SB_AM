@@ -22,10 +22,10 @@ html > body {
 }
 
 .btn-text-link {
-	color:black;
+	color:white;
 }
 
 .btn-text-link:hover {
 	color:olive;
-	text-decoration: underline;
+/* 	text-decoration: underline; */
 }
