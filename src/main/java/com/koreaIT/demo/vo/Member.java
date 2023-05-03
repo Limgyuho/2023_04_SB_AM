@@ -1,4 +1,3 @@
-
 package com.koreaIT.demo.vo;
 
 import lombok.AllArgsConstructor;

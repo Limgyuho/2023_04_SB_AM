@@ -2,6 +2,10 @@ package com.koreaIT.demo.controller;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,8 +60,35 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, int id) {
-
+	public String showDetail(HttpServletRequest req, HttpServletResponse resp, Model model, int id) {
+		
+		Cookie oldCookie = null;
+		Cookie[] cookies = req.getCookies();
+		
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("hitCount")) {
+					oldCookie = cookie;
+				}
+			}
+		}
+		
+		if (oldCookie != null) {
+			if (!oldCookie.getValue().contains("[" + id + "]")) {
+				articleService.increaseHitCount(id);
+				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+				oldCookie.setPath("/");
+				oldCookie.setMaxAge(30 * 60);
+				resp.addCookie(oldCookie);
+			}
+		} else {
+			articleService.increaseHitCount(id);
+			Cookie newCookie = new Cookie("hitCount", "[" + id + "]");
+			newCookie.setPath("/");
+			newCookie.setMaxAge(30 * 60);
+			resp.addCookie(newCookie);
+		}
+		
 		Article article = articleService.getForPrintArticle(id);
 
 		articleService.actorCanChangeData(rq.getLoginedMemberId(), article);
@@ -65,23 +96,6 @@ public class UsrArticleController {
 		model.addAttribute("article", article);
 
 		return "usr/article/detail";
-	}
-	
-	@RequestMapping("/usr/article/doIncreaseHitCount")
-	@ResponseBody
-	public ResultData<Integer> doIncreaseHitCount(int id) {
-		
-		ResultData<Integer> increaseHitCountRd = articleService.increaseHitCount(id);
-		
-		if (increaseHitCountRd.isFail()) {
-			return increaseHitCountRd;
-		}
-		
-		ResultData<Integer> rd = ResultData.from(increaseHitCountRd.getResultCode(), increaseHitCountRd.getMsg(), "hitCount", articleService.getArticleHitCount(id));
-		
-		rd.setData2("id", id);
-		
-		return rd;
 	}
 	
 	@RequestMapping("/usr/article/list")

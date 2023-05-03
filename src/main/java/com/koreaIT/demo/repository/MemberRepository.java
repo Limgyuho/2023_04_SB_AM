@@ -1,4 +1,3 @@
-
 package com.koreaIT.demo.repository;
 
 import org.apache.ibatis.annotations.Insert;
