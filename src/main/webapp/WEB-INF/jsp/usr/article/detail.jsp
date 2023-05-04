@@ -42,9 +42,9 @@
 						</tr>
 						<div class="mt-2 flex justify-end">
 							<c:if test="${rq.getLoginedMemberId() != 0  }">
-								<div class="mt-2">
-									<button class=" btn type="button" >좋아요</button>
-									<button class=" btn type="button" >싫어요</button>
+								<div class="btns mt-2">
+									<button class ="button1" type="button" >좋아요</button>
+									<button class ="button2" type="button" >싫어요</button>
 								</div>
 							</c:if>
 						</div>

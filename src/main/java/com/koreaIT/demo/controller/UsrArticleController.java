@@ -62,8 +62,12 @@ public class UsrArticleController {
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, HttpServletResponse resp, Model model, int id) {
 		
+		
+		
 		Cookie oldCookie = null;
 		Cookie[] cookies = req.getCookies();
+		
+		
 		
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
@@ -73,6 +77,10 @@ public class UsrArticleController {
 			}
 		}
 		
+		
+		
+		
+		
 		if (oldCookie != null) {
 			if (!oldCookie.getValue().contains("[" + id + "]")) {
 				articleService.increaseHitCount(id);
@@ -81,7 +89,11 @@ public class UsrArticleController {
 				oldCookie.setMaxAge(30 * 60);
 				resp.addCookie(oldCookie);
 			}
-		} else {
+		}
+		
+		
+		
+		else {
 			articleService.increaseHitCount(id);
 			Cookie newCookie = new Cookie("hitCount", "[" + id + "]");
 			newCookie.setPath("/");
