@@ -29,6 +29,21 @@
 							<td><span class="badge" id="articleDetail_increaseHitCount">${article.hitCount }</span></td>
 						</tr>
 						<tr>
+							<th>추천 수</th>
+							<td>
+								<c:if test="${rq.getLoginedMemberId() == 0 }">
+									<span >${article.sumReactionPoint } 개</span>	
+								</c:if>
+								<c:if test="${rq.getLoginedMemberId() != 0 }">
+									<span >${article.sumReactionPoint } 개</span>
+						</tr>	
+						<div class="mt-2 flex justify-end">
+									<button class="btn btn-outline ">좋아요</button>
+									<button class="btn btn-outline ">싫어요</button>
+						</div>
+								</c:if>
+							</td>	
+						<tr>
 							<th>작성자</th>
 							<td>${article.writerName }</td>
 						</tr>
@@ -40,16 +55,6 @@
 							<th>내용</th>
 							<td>${article.body }</td>
 						</tr>
-						<div class="mt-2 flex justify-end">
-							<c:if test="${rq.getLoginedMemberId() != 0  }">
-								<div class="btns mt-2">
-									<button class ="button1" type="button" >좋아요</button>
-									<button class ="button2" type="button" >싫어요</button>
-								</div>
-							</c:if>
-						</div>
-						
-						
 					</tbody>
 				</table>
 			</div>
