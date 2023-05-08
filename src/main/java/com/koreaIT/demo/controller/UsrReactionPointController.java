@@ -36,12 +36,31 @@ public class UsrReactionPointController {
 	@ResponseBody
 	public String doInsertReactionPoint(int relId, String relTypeCode, int point) {
 		
+		ReactionPoint reactionPoint = reactionPointService.getReactionPoint(rq.getLoginedMemberId(), relId, relTypeCode);
+		
+		if (reactionPoint.getSumReactionPoint() != 0) {
+			reactionPointService.doDeleteReactionPoint(rq.getLoginedMemberId(), relId, relTypeCode);
+		}
+		
 		reactionPointService.doInsertReactionPoint(rq.getLoginedMemberId(), relId, relTypeCode, point);
 		
 		if (point == 1) {
 			return Util.jsReplace(Util.f("%d번 글에 좋아요", relId), Util.f("../article/detail?id=%d", relId));
 		} else {
 			return Util.jsReplace(Util.f("%d번 글에 싫어요", relId), Util.f("../article/detail?id=%d", relId));
+		}
+	}
+	
+	@RequestMapping("/usr/reactionPoint/doDeleteReactionPoint")
+	@ResponseBody
+	public String doDeleteReactionPoint(int relId, String relTypeCode, int point) {
+		
+		reactionPointService.doDeleteReactionPoint(rq.getLoginedMemberId(), relId, relTypeCode);
+		
+		if (point == 1) {
+			return Util.jsReplace(Util.f("%d번 글에 좋아요 취소", relId), Util.f("../article/detail?id=%d", relId));
+		} else {
+			return Util.jsReplace(Util.f("%d번 글에 싫어요 취소", relId), Util.f("../article/detail?id=%d", relId));
 		}
 	}
 	
