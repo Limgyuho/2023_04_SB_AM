@@ -4,6 +4,30 @@
 <c:set var="pageTitle" value="Detail" />
 <%@ include file="../common/head.jsp" %>
 
+	<script>
+		function getReactionPoint(){
+			
+			$.get('../reactionPoint/getReactionPoint', {
+				relId : ${article.id},
+				relTypeCode : 'article'
+			}, function(data) {
+				if (data.data1.sumReactionPoint > 0) {
+					let goodBtn = $('#goodBtn');
+					goodBtn.removeClass('btn-outline');
+				} else if (data.data1.sumReactionPoint < 0) {
+					let badBtn = $('#badBtn');
+					badBtn.removeClass('btn-outline');
+				}
+				
+			}, 'json');
+			
+		}
+		
+		$(function() {
+			getReactionPoint();
+		})
+	</script>
+
 	<section class="mt-8 text-xl">
 		<div class="container mx-auto px-3">
 			<div class="table-box-type-1">
@@ -29,20 +53,20 @@
 							<td><span class="badge" id="articleDetail_increaseHitCount">${article.hitCount }</span></td>
 						</tr>
 						<tr>
-							<th>추천 수</th>
+							<th>추천</th>
 							<td>
 								<c:if test="${rq.getLoginedMemberId() == 0 }">
-									<span >${article.sumReactionPoint } 개</span>	
+									<span class="badge">${article.sumReactionPoint }</span>
 								</c:if>
 								<c:if test="${rq.getLoginedMemberId() != 0 }">
-									<span >${article.sumReactionPoint } 개</span>
-						</tr>	
-						<div class="mt-2 flex justify-end">
-									<button class="btn btn-outline ">좋아요</button>
-									<button class="btn btn-outline ">싫어요</button>
-						</div>
+									<a id="goodBtn" class="btn btn-outline btn-xs" href="../reactionPoint/doInsertReactionPoint?relId=${article.id }&relTypeCode=article&point=1">좋아요👍</a>
+									<span class="ml-2 badge">좋아요 : ${article.goodReactionPoint }개</span>
+									<br />
+									<a id="badBtn" class="btn btn-outline btn-xs" href="../reactionPoint/doInsertReactionPoint?relId=${article.id }&relTypeCode=article&point=-1">싫어요👎</a>
+									<span class="ml-2 badge">싫어요 : ${article.badReactionPoint * -1 }개</span>
 								</c:if>
-							</td>	
+							</td>
+						</tr>
 						<tr>
 							<th>작성자</th>
 							<td>${article.writerName }</td>

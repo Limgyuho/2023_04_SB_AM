@@ -80,5 +80,4 @@ public class ArticleService {
 	public void increaseHitCount(int id) {
 		articleRepository.increaseHitCount(id);
 	}
-
 }
