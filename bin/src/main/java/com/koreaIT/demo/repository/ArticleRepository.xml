@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.koreaIT.demo.repository.ArticleRepository">
+
+	<insert id="writeArticle">
+		INSERT INTO article
+			SET regDate = NOW(),
+				updateDate = NOW(),
+				memberId = #{memberId},
+				boardId = #{boardId},
+				title = #{title},
+				`body` = #{body}
+	</insert>
+	
+	<select id="getLastInsertId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+	
+	<update id="increaseHitCount">
+		UPDATE article
+			SET hitCount = hitCount + 1
+			WHERE id = #{id}
+	</update>
+	
+	<select id="getForPrintArticle" resultType="Article">
+		SELECT A.*
+				, M.name AS writerName
+				, IFNULL(SUM(RP.point), 0) AS sumReactionPoint
+	            , IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)), 0) AS goodReactionPoint
+	           	, IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)), 0) AS badReactionPoint
+			FROM article AS A
+			INNER JOIN `member` AS M
+			ON A.memberId = M.id
+			LEFT JOIN reactionPoint AS RP
+			ON relTypeCode = 'article'
+			AND RP.relId = A.id
+			WHERE A.id = #{id}
+			GROUP BY A.id
+	</select>
+	
+	<select id="getArticleById" resultType="Article">
+		SELECT * 
+			FROM article
+			WHERE id = #{id}
+	</select>
+	
+	<select id="getArticlesCnt" resultType="int">
+		SELECT COUNT(*)
+			FROM article
+			WHERE boardId = #{boardId}
+			<if test="searchKeyword != ''">
+				<choose>
+					<when test="searchKeywordType == 'title'">
+						AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<when test="searchKeywordType == 'body'">
+						AND body LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<otherwise>
+						AND (
+							title LIKE CONCAT('%', #{searchKeyword}, '%')
+							OR body LIKE CONCAT('%', #{searchKeyword}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+	</select>
+	
+	<select id="getArticles" resultType="Article">
+		WITH AM AS (
+		    SELECT A.*, M.name AS writerName 
+		        FROM article AS A
+		        INNER JOIN `member` AS M
+		        ON A.memberId = M.id
+		        WHERE 1 = 1
+				<if test="boardId != 0">
+					AND A.boardId = #{boardId}
+				</if>
+				<if test="searchKeyword != ''">
+					<choose>
+						<when test="searchKeywordType == 'title'">
+							AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')
+						</when>
+						<when test="searchKeywordType == 'body'">
+							AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')
+						</when>
+						<otherwise>
+							AND (
+								A.title LIKE CONCAT('%', #{searchKeyword}, '%')
+								OR A.body LIKE CONCAT('%', #{searchKeyword}, '%')
+							)
+						</otherwise>
+					</choose>
+				</if>
+			)
+			SELECT AM.*
+	            	, IFNULL(SUM(RP.point), 0) AS sumReactionPoint
+	            	, IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)), 0) AS goodReactionPoint
+	           		, IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)), 0) AS badReactionPoint
+	        	FROM AM
+            	LEFT JOIN reactionPoint AS RP
+            	ON RP.relTypeCode = 'article'
+            	AND RP.relId = AM.id
+			    GROUP BY AM.id
+			    ORDER BY AM.id DESC
+			    LIMIT #{limitStart}, #{itemsInAPage}
+	</select>
+	
+	<update id="modifyArticle">
+		UPDATE article
+			<set>
+				updateDate = NOW(),
+				<if test="title != null and title != ''">
+					title = #{title},
+				</if>
+				<if test="body != null and body != ''">
+					`body` = #{body}
+				</if>
+			</set>
+			WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteArticle">
+		DELETE FROM article
+			WHERE id = #{id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,242 @@
+# DB 삭제/생성/사용
+DROP DATABASE IF EXISTS SB_AM;
+CREATE DATABASE SB_AM;
+USE SB_AM;
+
+# article 테이블 생성
+CREATE TABLE article(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+	title VARCHAR(100) NOT NULL,
+	`body` TEXT NOT NULL
+);
+
+ALTER TABLE article ADD COLUMN memberId INT UNSIGNED NOT NULL AFTER updateDate;
+ALTER TABLE article ADD COLUMN boardId INT UNSIGNED NOT NULL AFTER memberId;
+ALTER TABLE article ADD COLUMN hitCount INT UNSIGNED NOT NULL DEFAULT 0;
+
+DESC article;
+
+# member 테이블 생성
+CREATE TABLE `member`(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+	loginId VARCHAR(20) NOT NULL UNIQUE,
+	loginPw VARCHAR(100) NOT NULL,
+	`authLevel` SMALLINT UNSIGNED NOT NULL DEFAULT 3 COMMENT '권한 레벨 (일반 = 3, 관리자 = 7)',
+	`name` VARCHAR(20) NOT NULL,
+	nickname VARCHAR(20) NOT NULL,
+	cellphoneNum VARCHAR(20) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	delStatus TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴여부 (탈퇴 전 = 0, 탈퇴 후 = 1)',
+	delDate DATETIME COMMENT '탈퇴 날짜'
+);
+
+# board 테이블 생성
+CREATE TABLE board(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+	`code` VARCHAR(20) NOT NULL UNIQUE COMMENT 'notice(공지사항), free(자유), ...',
+	`name` VARCHAR(20) NOT NULL UNIQUE COMMENT '게시판 이름',
+	delStatus TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '삭제여부 (삭제 전 = 0, 삭제 후 = 1)',
+	delDate DATETIME COMMENT '삭제 날짜'
+);
+
+# reactionPoint 테이블 생성
+CREATE TABLE reactionPoint(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+    memberId INT UNSIGNED NOT NULL,
+    relTypeCode VARCHAR(20) NOT NULL COMMENT '관련 데이터 타입 코드',
+    relId INT UNSIGNED NOT NULL COMMENT '관련 데이터 번호',
+	`point` SMALLINT NOT NULL DEFAULT 0
+);
+
+# reply 테이블 생성
+CREATE TABLE reply(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+    memberId INT UNSIGNED NOT NULL,
+    relTypeCode VARCHAR(20) NOT NULL COMMENT '관련 데이터 타입 코드',
+    relId INT UNSIGNED NOT NULL COMMENT '관련 데이터 번호',
+	`body` TEXT NOT NULL
+);
+
+# article 테스트 데이터
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+boardId = 2,
+title = '제목1',
+`body` = '내용1';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+boardId = 1,
+title = '제목2',
+`body` = '내용2';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+boardId = 2,
+title = '제목3',
+`body` = '내용3';
+
+# member 테스트 데이터
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'admin',
+loginPw = 'admin',
+`authLevel` = 7,
+`name` = '관리자',
+nickname = '관리자',
+cellphoneNum = '010-1111-1111',
+email = 'admin@naver.com';
+
+# member 테스트 데이터
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test1',
+loginPw = 'test1',
+`name` = '유저1',
+nickname = '유저1',
+cellphoneNum = '010-1112-1112',
+email = 'test1@naver.com';
+
+# member 테스트 데이터
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test2',
+loginPw = 'test2',
+`name` = '유저2',
+nickname = '유저2',
+cellphoneNum = '010-1113-1113',
+email = 'test2@naver.com';
+
+# board 테스트 데이터
+INSERT INTO board
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'notice',
+`name` = '공지사항';
+
+# board 테스트 데이터
+INSERT INTO board
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'free',
+`name` = '자유';
+
+# reactionPoint 테스트 데이터
+# 2번 회원이 1번 게시물에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 1,
+`point` = 1;
+
+# 2번 회원이 3번 게시물에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 3,
+`point` = -1;
+
+# 2번 회원이 2번 게시물에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 2,
+`point` = 1;
+
+# 3번 회원이 1번 게시물에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`point` = -1;
+
+# 3번 회원이 3번 게시물에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 3,
+`point` = 1;
+
+# 2번 회원이 1번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 1,
+`body` = '댓글 1';
+
+# 2번 회원이 3번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 3,
+`body` = '댓글 2';
+
+# 3번 회원이 1번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`body` = '댓글 3';
+
+# 3번 회원이 1번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`body` = '댓글 4';
+
+SELECT * FROM article;
+SELECT * FROM `member`;
+SELECT * FROM board;
+SELECT * FROM reactionPoint;
+SELECT * FROM reply;
+
+SELECT LAST_INSERT_ID();
+
+/* 게시물 늘리기 쿼리
+insert into article
+(
+    regDate, updateDate, memberId, boardId, title, `body`
+)
+select now(), now(), FLOOR(RAND() * 3) + 1, FLOOR(RAND() * 2) + 1, CONcat('제목_', rand()), CONCAT('내용_', RAND())
+from article;
+*/
+
+SELECT COUNT(*) FROM article;
