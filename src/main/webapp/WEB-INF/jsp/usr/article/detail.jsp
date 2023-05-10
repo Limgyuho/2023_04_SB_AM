@@ -31,7 +31,7 @@
 	</script>
 
 	<section class="mt-8 text-xl">
-		<div class="container mx-auto px-3">
+		<div class="container mx-auto px-3 pb-5 border-bottom-line">
 			<div class="table-box-type-1">
 				<table class="table table-zebra">
 					<colgroup>
@@ -96,4 +96,44 @@
 			</div>
 		</div>
 	</section>
+	
+	<script>
+		function replyWrite_submitForm(form) {
+			
+			form.body.value = form.body.value.trim();
+			
+			if (form.body.value.length < 2) {
+				alert('2글자 이상 입력해주세요');
+				form.body.focus();
+				return;
+			}
+			
+			form.submit();
+		}
+	</script>	
+	
+	<section class="mt-5 text-xl mb-5">
+		<div class="container mx-auto px-3">
+			<h2>댓글</h2>
+			
+			<c:forEach var="reply" items="${replies }" >
+				<div class="py-2 pl-16 border-bottom-line text-base">
+					<div class="font-semibold"><span>${reply.writerName }</span></div>
+					<div class="my-1 text-lg pl-2"><span>${reply.body }</span></div>
+					<div class="text-xs text-gray-400"><span>${reply.updateDate }</span></div>
+				</div>
+			</c:forEach>
+			
+			<form action="../reply/doWrite" method="POST" onsubmit="replyWrite_submitForm(this); return false;">
+				<input type="hidden" name="relTypeCode" value="article" />
+				<input type="hidden" name="relId" value="${article.id }" />
+				<div class="mt-4 border border-gray-400 rounded-lg text-base p-4">
+					<div class="mb-2"><span>닉네임</span></div>
+					<textarea class="textarea textarea-bordered w-full" name="body" placeholder="댓글을 남겨보세요"></textarea>
+					<div class="flex justify-end"><button class="btn-text-link btn btn-active btn-sm">등록</button></div>
+				</div>
+			</form>
+		</div>
+	</section>
+	
 <%@ include file="../common/foot.jsp" %>
