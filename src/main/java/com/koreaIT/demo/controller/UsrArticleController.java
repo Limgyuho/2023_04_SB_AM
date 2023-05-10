@@ -36,7 +36,7 @@ public class UsrArticleController {
 		this.articleService = articleService;
 		this.boardService = boardService;
 		this.replyService = replyService;
-		this.rq = rq;
+		this.rq = rq;ㅇㄴㅁㄻㄴ
 	}
 
 	@RequestMapping("/usr/article/write")
