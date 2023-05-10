@@ -56,6 +56,17 @@ CREATE TABLE reactionPoint(
 	`point` SMALLINT NOT NULL DEFAULT 0
 );
 
+# reply 테이블 생성
+CREATE TABLE reply(
+	id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+    memberId INT UNSIGNED NOT NULL,
+    relTypeCode VARCHAR(20) NOT NULL COMMENT '관련 데이터 타입 코드',
+    relId INT UNSIGNED NOT NULL COMMENT '관련 데이터 번호',
+	`body` TEXT NOT NULL
+);
+
 # article 테스트 데이터
 INSERT INTO article
 SET regDate = NOW(),
@@ -175,10 +186,47 @@ relTypeCode = 'article',
 relId = 3,
 `point` = 1;
 
+# 2번 회원이 1번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 1,
+`body` = '댓글 1';
+
+# 2번 회원이 3번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 3,
+`body` = '댓글 2';
+
+# 3번 회원이 1번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`body` = '댓글 3';
+
+# 3번 회원이 1번 게시물에 댓글
+INSERT INTO reply
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`body` = '댓글 4';
+
 SELECT * FROM article;
 SELECT * FROM `member`;
 SELECT * FROM board;
 SELECT * FROM reactionPoint;
+SELECT * FROM reply;
 
 SELECT LAST_INSERT_ID();
 
