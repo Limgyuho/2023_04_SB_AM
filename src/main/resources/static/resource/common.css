@@ -29,3 +29,7 @@ html > body {
 	color:olive;
 /* 	text-decoration: underline; */
 }
+
+.border-bottom-line {
+	border-bottom: 1px solid #d6cbcb;
+}

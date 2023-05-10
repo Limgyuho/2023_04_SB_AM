@@ -93,7 +93,7 @@ public class UsrArticleController {
 			resp.addCookie(newCookie);
 		}
 		
-		List<Reply> replies = replyService.getReplies("article", id);
+		List<Reply> replies = replyService.getReplies(rq.getLoginedMemberId(), "article", id);
 		
 		Article article = articleService.getForPrintArticle(id);
 

@@ -20,6 +20,8 @@ public class Rq {
 	
 	@Getter
 	private int loginedMemberId;
+	@Getter
+	private Member loginedMember;
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
 	private HttpSession httpSession;
@@ -31,12 +33,15 @@ public class Rq {
 		this.httpSession = req.getSession();
 		
 		int loginedMemberId = 0;
+		Member loginedMember = null;
 		
 		if (httpSession.getAttribute("loginedMemberId") != null) {
 			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
+			loginedMember = (Member) httpSession.getAttribute("loginedMember");
 		}
 		
 		this.loginedMemberId = loginedMemberId;
+		this.loginedMember = loginedMember;
 		
 		this.req.setAttribute("rq", this);
 	}
@@ -57,10 +62,12 @@ public class Rq {
 
 	public void login(Member member) {
 		httpSession.setAttribute("loginedMemberId", member.getId());
+		httpSession.setAttribute("loginedMember", member);
 	}
 
 	public void logout() {
 		httpSession.removeAttribute("loginedMemberId");
+		httpSession.removeAttribute("loginedMember");
 	}
 
 	public String jsReturnOnView(String msg, boolean isHistoryBack) {

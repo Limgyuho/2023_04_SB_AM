@@ -31,5 +31,5 @@ public class UsrReplyController {
 		return Util.jsReplace(replyWriteRd.getMsg(), Util.f("../article/detail?id=%d", relId));
 	}
 
-
+	
 }
