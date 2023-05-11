@@ -44,7 +44,7 @@ public class ReplyService {
 		reply.setActorCanChangeData(actorCanChangeDataRd.isSuccess());
 	}
 
-	private ResultData actorCanMD(int loginedMemberId, Reply reply) {
+	public ResultData actorCanMD(int loginedMemberId, Reply reply) {
 		
 		if (reply == null) {
 			return ResultData.from("F-1", "해당 댓글은 존재하지 않습니다");
@@ -55,6 +55,14 @@ public class ReplyService {
 		}
 		
 		return ResultData.from("S-1", "가능");
+	}
+
+	public Reply getReply(int id) {
+		return replyRepository.getReply(id);
+	}
+
+	public void deleteReply(int id) {
+		replyRepository.deleteReply(id);
 	}
 	
 }

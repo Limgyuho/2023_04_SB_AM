@@ -127,7 +127,7 @@
 								</button>
 								<ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-20">
 							        <li><a>수정</a></li>
-							        <li><a>삭제</a></li>
+							        <li><a href="../reply/doDelete?id=${reply.id }" onclick="if(confirm('정말 삭제하시겠습니까?') == false) return false;">삭제</a></li>
 						      	</ul>
 							</div>
 						</c:if>
