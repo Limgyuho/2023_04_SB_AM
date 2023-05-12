@@ -58,5 +58,9 @@ public class MemberService {
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);
 	}
+
+	public void doModify(int loginedMemberId, String nickname, String cellphoneNum, String email) {
+		memberRepository.doModify(loginedMemberId, nickname, cellphoneNum, email);
+	}
 	
 }

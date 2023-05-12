@@ -104,4 +104,49 @@ public class UsrMemberController {
 		return Util.jsReplace("정상적으로 로그아웃 되었습니다", "/");
 	}
 	
+	@RequestMapping("/usr/member/myPage")
+	public String showMyPage() {
+		return "usr/member/myPage";
+	}
+	
+	@RequestMapping("/usr/member/checkPassword")
+	public String checkPassword() {
+		return "usr/member/checkPassword";
+	}
+	
+	@RequestMapping("/usr/member/doCheckPassword")
+	public String doCheckPassword(String loginPw) {
+		
+		if (Util.empty(loginPw)) {
+			return rq.jsReturnOnView("비밀번호를 입력해주세요", true);
+		}
+		
+		if (rq.getLoginedMember().getLoginPw().equals(loginPw) == false) {
+			return rq.jsReturnOnView("비밀번호가 일치하지 않습니다", true);
+		}
+		
+		return "usr/member/modify";
+	}
+	
+	@RequestMapping("/usr/member/doModify")
+	@ResponseBody
+	public String doModify(String nickname, String cellphoneNum, String email) {
+		
+		if (Util.empty(nickname)) {
+			return Util.jsHistoryBack("닉네임을 입력해주세요");
+		}
+		
+		if (Util.empty(cellphoneNum)) {
+			return Util.jsHistoryBack("전화번호를 입력해주세요");
+		}
+		
+		if (Util.empty(email)) {
+			return Util.jsHistoryBack("이메일을 입력해주세요");
+		}
+		
+		memberService.doModify(rq.getLoginedMemberId(), nickname, cellphoneNum, email);
+		
+		return Util.jsReplace("회원정보가 수정되었습니다", "myPage");
+	}
+	
 }

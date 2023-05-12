@@ -31,6 +31,7 @@
 				<li class="hover:underline"><a class="h-full px-3 flex items-center" href="/usr/member/login"><span>LOGIN</span></a></li>
 			</c:if>
 			<c:if test="${rq.getLoginedMemberId() != 0  }">
+				<li class="hover:underline"><a class="h-full px-3 flex items-center" href="/usr/member/myPage"><span>MYPAGE</span></a></li>
 				<li class="hover:underline"><a class="h-full px-3 flex items-center" href="/usr/member/doLogout"><span>LOGOUT</span></a></li>
 			</c:if>
 		</ul>
