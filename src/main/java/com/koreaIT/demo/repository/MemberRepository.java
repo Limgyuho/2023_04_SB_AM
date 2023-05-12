@@ -65,4 +65,12 @@ public interface MemberRepository {
 			""")
 	public void doModify(int loginedMemberId, String nickname, String cellphoneNum, String email);
 
+	@Update("""
+			UPDATE `member`
+				SET updateDate = NOW(),
+					loginPw = #{loginPw}
+				WHERE id = #{loginedMemberId}
+			""")
+	public void doPasswordModify(int loginedMemberId, String loginPw);
+
 }
