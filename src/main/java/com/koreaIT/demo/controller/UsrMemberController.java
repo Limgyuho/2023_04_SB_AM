@@ -30,38 +30,51 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
+	public String doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 
-		if (rq.getLoginedMemberId() != 0) {
-			return ResultData.from("F-A", "로그아웃 후 이용해주세요");
-		}
-		
 		if (Util.empty(loginId)) {
-			return ResultData.from("F-1", "아이디를 입력해주세요");
+			return Util.jsHistoryBack("아이디를 입력해주세요");
 		}
 		if (Util.empty(loginPw)) {
-			return ResultData.from("F-2", "비밀번호를 입력해주세요");
+			return Util.jsHistoryBack("비밀번호를 입력해주세요");
 		}
 		if (Util.empty(name)) {
-			return ResultData.from("F-3", "이름을 입력해주세요");
+			return Util.jsHistoryBack("이름을 입력해주세요");
 		}
 		if (Util.empty(nickname)) {
-			return ResultData.from("F-4", "닉네임을 입력해주세요");
+			return Util.jsHistoryBack("닉네임을 입력해주세요");
 		}
 		if (Util.empty(cellphoneNum)) {
-			return ResultData.from("F-5", "전화번호를 입력해주세요");
+			return Util.jsHistoryBack("전화번호를 입력해주세요");
 		}
 		if (Util.empty(email)) {
-			return ResultData.from("F-6", "이메일을 입력해주세요");
+			return Util.jsHistoryBack("이메일을 입력해주세요");
 		}
 		
 		ResultData<Integer> doJoinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		
 		if (doJoinRd.isFail()) {
-			return ResultData.from(doJoinRd.getResultCode(), doJoinRd.getMsg());
+			return Util.jsHistoryBack(doJoinRd.getMsg());
 		}
 		
-		return ResultData.from(doJoinRd.getResultCode(), doJoinRd.getMsg(), "member", memberService.getMemberById((int) doJoinRd.getData1()));
+		return Util.jsReplace(doJoinRd.getMsg(), "/");
+	}
+	
+	@RequestMapping("/usr/member/loginIdDupCheck")
+	@ResponseBody
+	public ResultData loginIdDupCheck(String loginId) {
+		
+		if (Util.empty(loginId)) {
+			return ResultData.from("F-1", "아이디를 입력해주세요");
+		}
+		
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if (member != null) {
+			return ResultData.from("F-2", "이미 사용중인 아이디입니다", "loginId", loginId);
+		}
+		
+		return ResultData.from("S-1", "사용 가능한 아이디입니다", "loginId", loginId);
 	}
 	
 	@RequestMapping("/usr/member/login")
